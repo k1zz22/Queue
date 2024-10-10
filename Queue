@@ -1,0 +1,69 @@
+from collections import deque
+
+
+def check_input():
+    try:
+        user_input = int(input("Enter how many person(s) you want to cater: "))
+        return user_input
+    except ValueError:
+        print("Invalid input! Try again.")
+        return check_input()
+
+
+def construct_message(queues):
+    message = "Queue: "
+
+    if len(queues) == 1:
+        message += f"{queues[0]}."
+    else:
+        for i in range(len(queues)):
+            if i == len(queues) - 1:
+                message += f"{queues[i]}."
+            else:
+                message += f"{queues[i]}, "
+
+    return message
+
+
+def my_queues(user_input_number):
+    my_queues_array = deque([])
+    counter = 1
+    while user_input_number != 0:
+        user_input_queues = input(f"Enter person name #{counter}: ")
+        if user_input_queues.isdigit():
+            print("Only letters are allowed!")
+            continue
+        else:
+            my_queues_array.append(user_input_queues)
+            user_input_number -= 1
+            counter += 1
+
+    message = construct_message(my_queues_array)
+
+    print(message)
+    return my_queues_array
+
+
+def remove_queues(my_queues_args):
+    my_queue = my_queues_args
+    while True:
+        if len(my_queue) == 0:
+            return "You do not have any person left from your queue."
+        user_input = input("Click C to remove an item: ")
+        if user_input == "C":
+            if len(my_queue) == 0:
+                return "You do not have any person left from your queue."
+            else:
+                my_queue.popleft()
+                if len(my_queue) != 0:
+                    message = construct_message(my_queue)
+                    print(message)
+        else:
+            continue
+
+
+queue_limit = check_input()
+
+my_queue_array = my_queues(queue_limit)
+
+print(remove_queues(my_queue_array))
